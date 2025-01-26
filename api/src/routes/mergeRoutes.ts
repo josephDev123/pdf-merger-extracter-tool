@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { PDFMergerController } from "./controllers/PDFMergerController";
+import { PDFMergerController } from "../controllers/PDFMergerController";
 import multer from "multer";
 
 export const MergeRouterPDF = Router(); // Create a new router

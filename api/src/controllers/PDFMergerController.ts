@@ -42,7 +42,7 @@ export class PDFMergerController {
         "Content-Disposition": `attachment; filename=merged.pdf`,
       });
 
-      res.send(mergedPdfBytes);
+      res.send(Buffer.from(mergedPdfBytes));
     } catch (error) {
       console.error("Error merging PDFs:", error);
       res.status(500).json({ error: "Failed to merge PDFs" });

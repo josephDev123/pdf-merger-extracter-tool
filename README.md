@@ -46,6 +46,7 @@ npm run dev
 2. **Split PDFs**:
 
    - Upload a PDF file.
+   - click on split button
    - Display split PDF
    <!-- - Choose pages to extract. -->
    - download the individual pages.

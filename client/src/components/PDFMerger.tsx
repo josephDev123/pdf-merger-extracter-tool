@@ -21,7 +21,8 @@ interface DraggableItem {
 
 export const PDFMerger = () => {
   const [pdfs, setPdfs] = useState<PDFFile[]>([]);
-  const [preview, setPreview] = useState("");
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [togglePreview, setTogglePreview] = useState(false);
   // console.log(pdfs);
 
   const { mutateAsync, isPending } = useMutationAction(
@@ -122,9 +123,12 @@ export const PDFMerger = () => {
           const pdfData = new Blob([data], { type: "application/pdf" });
           const downloadLink = document.createElement("a");
           console.log(pdfData);
-          downloadLink.href = URL.createObjectURL(pdfData);
-          downloadLink.download = "merged.pdf"; // Name of the file to be downloaded
-          downloadLink.click();
+          const base64Url = URL.createObjectURL(pdfData);
+          // downloadLink.href = URL.createObjectURL(pdfData);
+          // downloadLink.download = "merged.pdf"; // Name of the file to be downloaded
+          // downloadLink.click();
+          setTogglePreview(true);
+          setPreviewUrl(base64Url);
 
           toast({
             title: "Merged",
@@ -227,9 +231,54 @@ export const PDFMerger = () => {
             </Button>
           </div>
         )}
-
-        <img src={`${preview}`} alt="preview" />
       </Card>
+      <div className="flex items-center justify-between mt-4">
+        <Button
+          disabled={!previewUrl ? true : false}
+          onClick={() => setTogglePreview((prev) => !prev)}
+          className={` px-4 py-2 bg-green-500 text-white rounded-md inline-block sm:text-base text-sm`}
+        >
+          Toggle merged PDF
+        </Button>
+
+        <Button
+          disabled={!previewUrl ? true : false}
+          onClick={() => {
+            setTogglePreview(false);
+            setPreviewUrl("");
+          }}
+          className=" px-4 py-2 bg-red-500 text-white rounded-md inline-block hover:bg-red-300 sm:text-base text-sm"
+        >
+          Clear
+        </Button>
+      </div>
+
+      {togglePreview && previewUrl && (
+        <div className="w-full max-w-3xl mt-3">
+          {/* Display PDF */}
+          <iframe
+            src={previewUrl}
+            className="w-full h-[500px] border"
+            title="PDF Preview"
+          ></iframe>
+
+          {/* Download Button */}
+          <a
+            href={previewUrl}
+            download="preview.pdf"
+            className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md inline-block"
+          >
+            Download PDF
+          </a>
+
+          <Button
+            onClick={() => setTogglePreview(false)}
+            className="mt-4 px-4 py-2 ml-3 text-white rounded-md inline-block"
+          >
+            hide
+          </Button>
+        </div>
+      )}
     </DndProvider>
   );
 };

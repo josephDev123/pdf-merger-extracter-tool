@@ -61,7 +61,7 @@ docker compose down
 - **Tailwind CSS** – Styling
 - **Nodejs and PDFDocument** – PDF processing
 - **File Handling APIs(Multer)** – For uploads and downloads
-- **AWS S3 and Cloudfront** – For uploads and downloads
+- **AWS S3 and Cloudfront** – For Storage and CDN
 
 ## Contributing
 

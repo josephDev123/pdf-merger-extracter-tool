@@ -20,18 +20,22 @@ This is a web tool that allows users to merge multiple PDFs into a single file a
  cd pdf-flip-merge-split
 ```
 
-### Install Dependencies and Run Application
+### Run Application
 
 ```sh
 cd client
-npm install
-npm run dev
+touch .env #pls create the .env by following the .env-example format
 ```
 
 ```sh
 cd api
-npm install
-npm run dev
+touch .env #pls create the .env by following the .env-example format
+```
+
+```sh
+docker compose up -d
+OR
+docker compose down
 ```
 
 ## Usage

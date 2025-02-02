@@ -56,7 +56,8 @@ npm run dev
 - **React.js** – Frontend framework
 - **Tailwind CSS** – Styling
 - **Nodejs and PDFDocument** – PDF processing
-- **File Handling APIs** – For uploads and downloads
+- **File Handling APIs(Multer)** – For uploads and downloads
+- **AWS S3 and Cloudfront** – For uploads and downloads
 
 ## Contributing
 

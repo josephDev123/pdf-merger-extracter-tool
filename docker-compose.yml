@@ -1,0 +1,18 @@
+services:
+  client:
+    build: ./client
+    image: pdf-client-image
+    container_name: pdf-client-container
+    env_file:
+      - ./client/.env
+    ports:
+      - "3000:8080"
+
+  backend:
+    build: ./api
+    image: pdf-backend-image
+    container_name: pdf-backend-container
+    env_file:
+      - ./api/.env
+    ports:
+      - "4000:5000"

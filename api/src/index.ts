@@ -8,11 +8,20 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+const allowedOrigins = ["http://localhost:3000"];
+
 app.use(
   cors({
-    origin: "http://localhost:8080",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
   })
 );
+
 app.use("/api/", MergeRouterPDF);
 app.use("/api/", SplitRouterPDF);
 

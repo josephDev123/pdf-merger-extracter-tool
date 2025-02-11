@@ -45,11 +45,12 @@ jobs:
         run: |
           docker compose up -d --build
           docker tag pdf-client-image:latest ${{ secrets.ECR_REPOSITORY }}:latest
-          docker tag pdf-backend-image:latest ${{ secrets.ECR_REPOSITORY }}:latest
+          docker tag pdf-backend-image:latest ${{ secrets.ECR_REPOSITORY }}:latest-1
 
       - name: Push Docker Image to Amazon ECR
         run: |
           docker push ${{ secrets.ECR_REPOSITORY }}:latest
+          docker push ${{ secrets.ECR_REPOSITORY }}:latest-1
 
       # - name: Update ECS Service
       #   run: |

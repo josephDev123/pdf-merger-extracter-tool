@@ -23,7 +23,7 @@ jobs:
       - name: list the file structure
         run: |
           echo "Listing project structure..." 
-           ls -a
+           ls -R
 
       - name: Login to Amazon ECR
         id: login-ecr

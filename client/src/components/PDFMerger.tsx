@@ -124,9 +124,6 @@ export const PDFMerger = () => {
           const downloadLink = document.createElement("a");
           console.log(pdfData);
           const base64Url = URL.createObjectURL(pdfData);
-          // downloadLink.href = URL.createObjectURL(pdfData);
-          // downloadLink.download = "merged.pdf"; // Name of the file to be downloaded
-          // downloadLink.click();
           setTogglePreview(true);
           setPreviewUrl(base64Url);
 

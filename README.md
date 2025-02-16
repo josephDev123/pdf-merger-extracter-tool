@@ -1,15 +1,17 @@
-# PDF Merge and Split Tool
+# PDF Merge and Extractter Tool
 
-This is a web tool that allows users to merge multiple PDFs into a single file and also split PDFs into individual pages.
+PDF Merge & Extract" is a powerful tool that allows users to merge multiple PDFs into one file and extract specific pages from an uploaded PDF. Whether you need to combine several documents or select only certain pages (like "1-3" or "4"), this tool makes it seamless and efficient. Perfect for professionals, students, and anyone handling PDFs daily!
 
 ## Features
 
 1. **Drag and Drop** – Reorder PDFs easily before merging.
 2. **Preview Merged PDF** – View the merged document before downloading.
-3. **Split PDF** – Extract individual pages from a PDF file.
+3. **Extract PDF** – Extract specific pages or page ranges from any PDF
 4. **User-Friendly Interface** – Simple and intuitive UI for smooth navigation.
-5. **Fast Processing** – Quickly merge and split PDFs without quality loss.
+5. **Fast Processing** – Quickly merge and extract PDFs without quality loss.
 6. **Secure Handling** – No data is stored; all processing happens in real-time.
+
+Simplify your PDF management today with PDF Merge & Extract!
 
 ## Installation
 
@@ -47,13 +49,13 @@ docker compose down
    - Click the "Merge" button and preview the result.
    - Download the merged file.
 
-2. **Split PDFs**:
+2. **Extract PDFs**:
 
    - Upload a PDF file.
-   - click on split button
-   - Display split PDF
-   <!-- - Choose pages to extract. -->
-   - download the individual pages.
+   - input the ranges or page to extract
+   - click on extract button
+   - Display new extract PDF
+   - download the new extract PDF.
 
 ## Technologies Used
 

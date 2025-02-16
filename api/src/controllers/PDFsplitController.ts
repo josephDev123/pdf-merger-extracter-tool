@@ -6,34 +6,36 @@ export class PDFsplitController {
   async split(req: Request, res: Response): Promise<any> {
     // PDF splitting route
     const { file } = req;
-    const { pagesPerSplit } = req.body;
+    const { pagesRange } = req.body;
 
     if (!file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    if (!pagesPerSplit || isNaN(pagesPerSplit) || pagesPerSplit <= 0) {
-      return res.status(400).json({ error: "Invalid pagesPerSplit value" });
+    if (!pagesRange) {
+      return res.status(400).json({ error: "pagesRange value is required" });
+    }
+    if (
+      pagesRange.split("-").length < 1 ||
+      typeof Number(pagesRange.split("-")[0]) != "number" ||
+      typeof Number(pagesRange.split("-")[1]) != "number"
+    ) {
+      return res.status(400).json({ error: "Invalid pagesRange value" });
     }
 
     const inputPath = file.path;
+    const pageRangeFormat = {
+      start: Number(pagesRange.split("-")[0]),
+      end: Number(pagesRange.split("-")[1]),
+    };
 
     try {
       // Splitted the PDF
-      const totalChunks = await splitPDF(
-        inputPath,
-        parseInt(pagesPerSplit, 10)
-      );
-
-      // Send success response
-      const splitFiles = [];
-      for (let i = 0; i <= totalChunks.length; i++) {
-        splitFiles.push(totalChunks[i]);
-      }
+      const splitedFile = await splitPDF(inputPath, pagesRange);
 
       res
         .status(200)
-        .json({ message: "PDF split successfully", files: splitFiles });
+        .json({ message: "PDF split successfully", file: splitedFile });
 
       // Clean up uploaded file
       await fs.remove(inputPath);

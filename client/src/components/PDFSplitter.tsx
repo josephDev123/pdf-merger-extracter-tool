@@ -12,7 +12,7 @@ interface PDFFile {
   file: File;
 }
 
-export const PDFSplitter = () => {
+export const PDFExtracter = () => {
   const [pdf, setPdf] = useState<PDFFile | null>(null);
   const [pageRange, setPageRange] = useState("");
 
@@ -24,7 +24,7 @@ export const PDFSplitter = () => {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     const files = Array.from(e.dataTransfer.files);
     if (files.length !== 1 || files[0].type !== "application/pdf") {
       toast({
@@ -49,7 +49,7 @@ export const PDFSplitter = () => {
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;
-    
+
     const file = e.target.files[0];
     if (file.type !== "application/pdf") {
       toast({
@@ -113,7 +113,9 @@ export const PDFSplitter = () => {
         className="border-2 border-dashed rounded-lg p-8 text-center mb-6 transition-colors hover:border-primary"
       >
         <FileUp className="mx-auto mb-4 text-muted-foreground" size={40} />
-        <p className="text-lg font-medium mb-2">Drag and drop a PDF file here</p>
+        <p className="text-lg font-medium mb-2">
+          Drag and drop a PDF file here
+        </p>
         <p className="text-sm text-muted-foreground mb-4">or</p>
         <Button variant="outline" className="relative">
           Choose file
@@ -152,17 +154,17 @@ export const PDFSplitter = () => {
             <Label htmlFor="pageRange">Page Range</Label>
             <Input
               id="pageRange"
-              placeholder="e.g., 1-3, 5, 7-9"
+              placeholder="e.g., 1-3, 5"
               value={pageRange}
               onChange={(e) => setPageRange(e.target.value)}
             />
             <p className="text-sm text-muted-foreground">
-              Specify page numbers and/or ranges separated by commas
+              Specify page number or ranges
             </p>
           </div>
 
           <Button onClick={splitPdf} className="w-full mt-4">
-            Split PDF
+            Extract PDF
           </Button>
         </div>
       )}

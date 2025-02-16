@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PDFMerger } from "@/components/PDFMerger";
-import { PDFExtracter } from "@/components/PDFSplitter";
+import { PDFExtracter } from "@/components/PDFExtractter";
 
 const Index = () => {
   return (

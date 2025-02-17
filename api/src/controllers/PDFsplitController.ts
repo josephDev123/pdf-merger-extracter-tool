@@ -24,10 +24,10 @@ export class PDFsplitController {
     }
 
     const inputPath = file.path;
-    const pageRangeFormat = {
-      start: Number(pagesRange.split("-")[0]),
-      end: Number(pagesRange.split("-")[1]),
-    };
+    // const pageRangeFormat = {
+    //   start: Number(pagesRange.split("-")[0]),
+    //   end: Number(pagesRange.split("-")[1]),
+    // };
 
     try {
       // Splitted the PDF

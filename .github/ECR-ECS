@@ -1,0 +1,57 @@
+# name: Deploy to AWS ECS
+
+# on:
+#   push:
+#     branches:
+#       - master
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v4
+
+#       - name: Create .env File for Docker
+#         run: |
+#           echo "Creating .env file inside api/ directory..."
+#           mkdir -p api  # Ensure the api directory exists
+#           echo "PORT=${{ secrets.PORT }}" >> api/.env
+#           echo "CLOUDFRONT_URL=${{ secrets.CLOUDFRONT_URL }}" >> api/.env
+#           echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> api/.env
+#           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> api/.env
+#           echo "Generated .env file:"
+#           cat api/.env  # Optional: Print the .env file for verification
+
+#       - name: list the file structure
+#         run: |
+#           echo "Listing project structure..." 
+#            ls -R
+
+#       - name: Configure AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v2
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: ${{ secrets.AWS_REGION }}
+
+#       - name: Login to Amazon ECR
+#         id: login-ecr
+#         run: |
+#           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
+
+#       - name: Build and Tag Docker Image
+#         run: |
+#           docker compose up -d --build
+#           docker tag pdf-client-image:latest ${{ secrets.ECR_REPOSITORY }}:latest-client
+#           docker tag pdf-backend-image:latest ${{ secrets.ECR_REPOSITORY }}:latest-api
+
+#       - name: Push Docker Image to Amazon ECR
+#         run: |
+#           docker push ${{ secrets.ECR_REPOSITORY }}:latest-client
+#           docker push ${{ secrets.ECR_REPOSITORY }}:latest-api
+
+#       # - name: Update ECS Service
+#       #   run: |
+#       #     aws ecs update-service --cluster ${{ secrets.ECS_CLUSTER }} --service ${{ secrets.ECS_SERVICE }} --force-new-deployment

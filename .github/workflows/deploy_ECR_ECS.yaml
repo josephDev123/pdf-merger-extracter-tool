@@ -1,4 +1,4 @@
-name: Deploy to AWS ECS
+name: Deploy to EC2
 
 on:
   push:
@@ -10,8 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Create .env File for Docker
         run: |
@@ -24,34 +27,37 @@ jobs:
           echo "Generated .env file:"
           cat api/.env  # Optional: Print the .env file for verification
 
-      - name: list the file structure
+      - name: Build Docker Images
         run: |
-          echo "Listing project structure..." 
-           ls -R
+          docker build -t myapp-frontend ./client
+          docker build -t myapp-backend ./api
+          docker save myapp-frontend -o myapp-frontend.tar
+          docker save myapp-backend -o myapp-backend.tar
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+      - name: Copy Docker Images & Compose File to EC2
+        uses: appleboy/scp-action@v0.1.7
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "myapp-frontend.tar,myapp-backend.tar,docker-compose.yml"
+          target: "~/app"
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        run: |
-          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY }}
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/app
 
-      - name: Build and Tag Docker Image
-        run: |
-          docker compose up -d --build
-          docker tag pdf-client-image:latest ${{ secrets.ECR_REPOSITORY }}:latest-client
-          docker tag pdf-backend-image:latest ${{ secrets.ECR_REPOSITORY }}:latest-api
+            # Load the Docker images
+            docker load -i myapp-frontend.tar
+            docker load -i myapp-backend.tar
 
-      - name: Push Docker Image to Amazon ECR
-        run: |
-          docker push ${{ secrets.ECR_REPOSITORY }}:latest-client
-          docker push ${{ secrets.ECR_REPOSITORY }}:latest-api
+            # Stop running containers
+            docker-compose down
 
-      # - name: Update ECS Service
-      #   run: |
-      #     aws ecs update-service --cluster ${{ secrets.ECS_CLUSTER }} --service ${{ secrets.ECS_SERVICE }} --force-new-deployment
+            # Start new containers
+            docker-compose up -d --force-recreate

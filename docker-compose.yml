@@ -9,6 +9,8 @@ services:
       - VITE_BASE_API_URL=http://localhost:4000/api
     ports:
       - "3000:8080"
+    depends_on:
+      - backend
 
   backend:
     build: ./api

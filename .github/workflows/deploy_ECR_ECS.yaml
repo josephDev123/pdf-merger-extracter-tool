@@ -25,19 +25,33 @@ jobs:
           echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> api/.env
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> api/.env
           echo "Generated .env file:"
-          cat api/.env  # Optional: Print the .env file for verification
+          cat api/.env  # Print for debugging
 
       - name: Build Docker Images
         run: |
+          echo "Building Docker Images..."
           docker build -t myapp-frontend ./client
           docker build -t myapp-backend ./api
-          docker save -o myapp-frontend.tar myapp-frontend
-          docker save -o myapp-backend.tar myapp-backend
 
-      - name: Verify Files & Set Permissions
+      - name: Verify Docker Images
         run: |
-          ls -l
-          chmod 644 myapp-frontend.tar myapp-backend.tar  # Ensure readable files
+          echo "Checking available Docker images..."
+          docker images  # List all built images for debugging
+
+      - name: Save Docker Images as Tar Files
+        run: |
+          echo "Saving Docker images to .tar files..."
+          docker save -o myapp-frontend.tar myapp-frontend || echo "Failed to save frontend image"
+          docker save -o myapp-backend.tar myapp-backend || echo "Failed to save backend image"
+
+      - name: Verify .tar Files
+        run: |
+          echo "Checking if .tar files were created..."
+          ls -lh myapp-frontend.tar myapp-backend.tar || echo "Tar files not found!"
+          file myapp-frontend.tar myapp-backend.tar || echo "Invalid tar files!"
+
+      - name: Set Permissions
+        run: chmod 644 myapp-frontend.tar myapp-backend.tar
 
       - name: Copy Docker Images & Compose File to EC2
         uses: appleboy/scp-action@v0.1.7
@@ -45,7 +59,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "myapp-frontend.tar myapp-backend.tar docker-compose.yml" # Space-separated
+          source: "myapp-frontend.tar myapp-backend.tar docker-compose.yml"
           target: "~/app"
 
       - name: Deploy on EC2
@@ -56,13 +70,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~/app
-
-            # Load the Docker images
-            docker load -i myapp-frontend.tar
-            docker load -i myapp-backend.tar
-
-            # Stop running containers (ignore errors if none exist)
+            docker load -i myapp-frontend.tar || echo "Failed to load frontend image"
+            docker load -i myapp-backend.tar || echo "Failed to load backend image"
             docker-compose down || true
-
-            # Start new containers
             docker-compose up -d --force-recreate

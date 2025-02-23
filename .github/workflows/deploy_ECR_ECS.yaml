@@ -31,8 +31,13 @@ jobs:
         run: |
           docker build -t myapp-frontend ./client
           docker build -t myapp-backend ./api
-          docker save myapp-frontend -o myapp-frontend.tar
-          docker save myapp-backend -o myapp-backend.tar
+          docker save -o myapp-frontend.tar myapp-frontend
+          docker save -o myapp-backend.tar myapp-backend
+
+      - name: Verify Files & Set Permissions
+        run: |
+          ls -l
+          chmod 644 myapp-frontend.tar myapp-backend.tar  # Ensure readable files
 
       - name: Copy Docker Images & Compose File to EC2
         uses: appleboy/scp-action@v0.1.7
@@ -40,7 +45,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "myapp-frontend.tar,myapp-backend.tar,docker-compose.yml"
+          source: "myapp-frontend.tar myapp-backend.tar docker-compose.yml" # Space-separated
           target: "~/app"
 
       - name: Deploy on EC2
@@ -56,8 +61,8 @@ jobs:
             docker load -i myapp-frontend.tar
             docker load -i myapp-backend.tar
 
-            # Stop running containers
-            docker-compose down
+            # Stop running containers (ignore errors if none exist)
+            docker-compose down || true
 
             # Start new containers
             docker-compose up -d --force-recreate

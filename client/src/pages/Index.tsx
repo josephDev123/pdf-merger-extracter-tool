@@ -8,7 +8,7 @@ const Index = () => {
       <div className="max-w-3xl mx-auto space-y-8">
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold tracking-tight">
-            Merge & Extract PDF Tools
+            Merge & Extract PDF Tools.
           </h1>
           <p className="text-lg text-muted-foreground">
             Merge multiple PDFs into one or extract specific page(s) from PDF.

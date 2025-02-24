@@ -61,6 +61,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "myapp-frontend.tar,myapp-backend.tar,docker-compose.yml"
           target: "/var/www/myApps"
+          debug: true
 
       - name: Deploy on EC2
         uses: appleboy/ssh-action@v0.1.6

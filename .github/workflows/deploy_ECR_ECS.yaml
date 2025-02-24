@@ -61,6 +61,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             sudo mkdir -p /var/www/myApps
+            sudo mkdir -p /var/www/myApps/api/.env
             sudo chown $USER:$USER /var/www/myApps
 
       - name: Copy Docker Images & Compose File to EC2

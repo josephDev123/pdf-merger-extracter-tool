@@ -11,7 +11,7 @@ const Index = () => {
             Merge & Extract PDF Tools
           </h1>
           <p className="text-lg text-muted-foreground">
-            Merge multiple PDFs into one or extract specific page(s) from PDF
+            Merge multiple PDFs into one or extract specific page(s) from PDF.
           </p>
         </div>
 

@@ -87,6 +87,9 @@ jobs:
 
             # Ensure the .env file exists on EC2
             sudo touch /var/www/myApps/api/.env
+            sudo chown -R $USER:$USER /var/www/myApps/api
+            sudo chmod -R 644 /var/www/myApps/api/.env
+
             echo "PORT=${{ secrets.PORT }}" >> /var/www/myApps/api/.env
             echo "CLOUDFRONT_URL=${{ secrets.CLOUDFRONT_URL }}" >> /var/www/myApps/api/.env
             echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> /var/www/myApps/api/.env

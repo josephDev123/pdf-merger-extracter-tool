@@ -81,7 +81,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /var/www/myApps
-            docker load -i myapp-frontend.tar || echo "Failed to load frontend image"
-            docker load -i myapp-backend.tar || echo "Failed to load backend image"
+            sudo docker load -i myapp-frontend.tar || echo "Failed to load frontend image"
+            sudo docker load -i myapp-backend.tar || echo "Failed to load backend image"
             docker compose down || true
             docker compose up -d --force-recreate

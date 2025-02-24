@@ -83,5 +83,5 @@ jobs:
             cd /var/www/myApps
             docker load -i myapp-frontend.tar || echo "Failed to load frontend image"
             docker load -i myapp-backend.tar || echo "Failed to load backend image"
-            docker-compose down || true
-            docker-compose up -d --force-recreate
+            docker compose down || true
+            docker compose up -d --force-recreate

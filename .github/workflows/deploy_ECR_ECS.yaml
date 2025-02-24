@@ -61,7 +61,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             sudo mkdir -p /var/www/myApps
-            sudo mkdir -p /var/www/myApps/api
+            # sudo mkdir -p /var/www/myApps/api
             sudo chown $USER:$USER /var/www/myApps
 
       - name: Copy Docker Images & Compose File to EC2
@@ -86,7 +86,7 @@ jobs:
             sudo docker load -i myapp-backend.tar || echo "Failed to load backend image"
 
             # Ensure the .env file exists on EC2
-            touch /var/www/myApps/api/.env
+            sudo touch /var/www/myApps/api/.env
             echo "PORT=${{ secrets.PORT }}" >> /var/www/myApps/api/.env
             echo "CLOUDFRONT_URL=${{ secrets.CLOUDFRONT_URL }}" >> /var/www/myApps/api/.env
             echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> /var/www/myApps/api/.env

@@ -22,9 +22,9 @@ export const useMutationAction = <TData, TVariables>(
     onSuccess: (data) => {
       toast.success("Operation successful...");
     },
-    onError: (error) => {
-      toast.error(error.message);
-    },
+    // onError: (error) => {
+    //   toast.error(error.message);
+    // },
     ...options,
   });
 };

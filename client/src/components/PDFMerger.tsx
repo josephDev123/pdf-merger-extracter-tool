@@ -8,6 +8,8 @@ import { toast } from "@/components/ui/use-toast";
 import { useMutationAction } from "@/utils/useMutationAction";
 import { TbLoader } from "react-icons/tb";
 import { error } from "console";
+import { AxiosError } from "axios";
+import { AxiosErrorHandler } from "@/utils/axiosErrorHandler";
 
 interface PDFFile {
   name: string;
@@ -143,6 +145,7 @@ export const PDFMerger = () => {
       },
       onError: (error) => {
         console.error(error);
+        // return AxiosErrorHandler(error);
         toast({
           title: "Error",
           description: error.message,

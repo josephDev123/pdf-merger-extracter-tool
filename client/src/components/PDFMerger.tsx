@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { useMutationAction } from "@/utils/useMutationAction";
 import { TbLoader } from "react-icons/tb";
+import { error } from "console";
 
 interface PDFFile {
   name: string;
@@ -139,6 +140,14 @@ export const PDFMerger = () => {
             variant: "destructive",
           });
         }
+      },
+      onError: (error) => {
+        console.error(error);
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
       },
     });
   };

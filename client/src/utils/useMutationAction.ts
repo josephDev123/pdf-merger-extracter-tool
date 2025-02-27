@@ -16,7 +16,7 @@ export const useMutationAction = <TData, TVariables>(
         });
         return response.data;
       } catch (error) {
-        throw new Error("Operation failed...");
+        throw new Error(error);
       }
     },
     onSuccess: (data) => {

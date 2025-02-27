@@ -15,43 +15,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PDFMergerController = void 0;
 const fs_1 = __importDefault(require("fs"));
 const merger_1 = require("../utils/merger");
+const GlobalErrorHandler_1 = require("../utils/GlobalErrorHandler");
 class PDFMergerController {
-    merge(req, res) {
+    merge(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const files = req.files;
                 if (!files || files.length < 2) {
-                    return res
-                        .status(400)
-                        .json({ error: "Please upload at least two PDF files." });
+                    throw new GlobalErrorHandler_1.GlobalError("Please upload at least two PDF files.", 400, true);
                 }
-                // // Create a new PDFDocument to hold the merged content
-                // const mergedPdf = await PDFDocument.create();
-                // // Loop through uploaded PDFs and merge them
-                // for (const file of files) {
-                //   const pdfBytes = fs.readFileSync(file.path);
-                //   const srcDoc = await PDFDocument.load(pdfBytes);
-                //   const copiedPages = await mergedPdf.copyPages(
-                //     srcDoc,
-                //     srcDoc.getPageIndices()
-                //   );
-                //   copiedPages.forEach((page) => mergedPdf.addPage(page));
-                // }
-                // // Serialize the merged PDF to bytes
-                // const mergedPdfBytes = await mergedPdf.save();
                 const mergedPdfBytes = yield (0, merger_1.PdfMerger)(files);
                 // Clean up uploaded files
                 files.forEach((file) => fs_1.default.unlinkSync(file.path));
                 // Send the merged PDF as a downloadable file
-                res.set({
-                    "Content-Type": "application/pdf",
-                    "Content-Disposition": `attachment; filename=merged.pdf`,
-                });
-                res.send(Buffer.from(mergedPdfBytes));
+                // res.set({
+                //   "Content-Type": "application/pdf",
+                //   "Content-Disposition": `attachment; filename=merged.pdf`,
+                // });
+                // res.send(Buffer.from(mergedPdfBytes));
+                throw Error("Error merging PDFs");
             }
             catch (error) {
-                console.error("Error merging PDFs:", error);
-                res.status(500).json({ error: "Failed to merge PDFs" });
+                return next(error);
             }
         });
     }

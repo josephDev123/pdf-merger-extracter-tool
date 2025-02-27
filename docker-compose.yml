@@ -7,14 +7,21 @@ services:
       - VITE_BASE_API_URL=http://localhost:4000/api
     ports:
       - "3000:8080"
+    restart: always
     depends_on:
       - backend
 
   backend:
     build: ./api
+    # secrets:
+    #   - backend_env_file
     image: pdf-backend-image
     container_name: pdf-backend-container
     env_file:
       - ./api/.env
     ports:
       - "4000:5000"
+    restart: always
+# secrets:
+#   backend_env_file:
+#     file: ./api/.env

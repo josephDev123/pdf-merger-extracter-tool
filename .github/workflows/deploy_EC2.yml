@@ -43,7 +43,7 @@ jobs:
           source: "." # Copy everything in the repository
           target: "/var/www/myApps" # Destination folder on EC2
           #recursive: true  # Ensure all subdirectories are copied
-          rm: true # Remove existing files before copying
+          #rm: true # Remove existing files before copying
           overwrite: true # Replace existing files
 
       - name: Deploy on EC2

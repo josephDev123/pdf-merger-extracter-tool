@@ -33,10 +33,10 @@ app.use(
 
 app.listen(port, () => {
   console.log("Server is running on http://localhost:" + port);
-  console.log(
-    process.env.PORT,
-    process.env.AWS_ACCESS_KEY,
-    process.env.AWS_SECRET_ACCESS_KEY,
-    process.env.CLOUDFRONT_URL
-  );
+  // console.log(
+  //   process.env.PORT,
+  //   process.env.AWS_ACCESS_KEY,
+  //   process.env.AWS_SECRET_ACCESS_KEY,
+  //   process.env.CLOUDFRONT_URL
+  // );
 });

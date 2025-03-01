@@ -26,13 +26,13 @@ export class PDFMergerController {
       files.forEach((file) => fs.unlinkSync(file.path));
 
       // Send the merged PDF as a downloadable file
-      // res.set({
-      //   "Content-Type": "application/pdf",
-      //   "Content-Disposition": `attachment; filename=merged.pdf`,
-      // });
+      res.set({
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename=merged.pdf`,
+      });
 
-      // res.send(Buffer.from(mergedPdfBytes));
-      throw Error("Error merging PDFs");
+      res.send(Buffer.from(mergedPdfBytes));
+      // throw Error("Error merging PDFs");
     } catch (error) {
       return next(error);
     }

@@ -12,7 +12,7 @@ const GlobalError_1 = require("./middleware/GlobalError");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 5000;
-const allowedOrigins = ["http://localhost:3000"];
+const allowedOrigins = ["http://localhost:3000", "http://16.16.215.2:3000"];
 app.use((0, cors_1.default)({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {

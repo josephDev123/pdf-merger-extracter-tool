@@ -4,8 +4,8 @@ services:
     image: pdf-client-image
     container_name: pdf-client-container
     environment:
-      # - VITE_BASE_API_URL=http://16.16.215.2:4000/api
-      - VITE_BASE_API_URL=http://localhost:4000/api
+      - VITE_BASE_API_URL=http://16.16.215.2:4000/api
+      # - VITE_BASE_API_URL=http://localhost:4000/api
     ports:
       - "3000:8080"
     restart: always

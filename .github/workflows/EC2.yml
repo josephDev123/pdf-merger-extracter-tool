@@ -93,8 +93,4 @@ jobs:
 
             # Run new containers
             docker run -d -e VITE_BASE_API_URL=http://16.16.215.2:4000/api/ --name pdf-client-container -p 3000:8080 myapp-frontend
-            docker run -d --name pdf-backend-container -p 4000:5000 myapp-backend
-
-
-            # docker run -d -e VITE_BASE_API_URL=http://16.16.215.2:4000/api/ --name pdf-client-container -p 3000:8080 myapp-frontend
-            # docker run -d --name pdf-backend-container -p 4000:5000  myapp-backend
+            docker run -d -e PORT=${{ secrets.PORT }} -e CLOUDFRONT_URL=${{ secrets.CLOUDFRONT_URL }} -e AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}  --name pdf-backend-container -p 4000:5000 myapp-backend

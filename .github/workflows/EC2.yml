@@ -13,16 +13,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Create .env File for Docker
-        run: |
-          echo "Creating .env file inside api/ directory..."
-          mkdir -p api  # Ensure the api directory exists
-          echo "PORT=${{ secrets.PORT }}" >> api/.env
-          echo "CLOUDFRONT_URL=${{ secrets.CLOUDFRONT_URL }}" >> api/.env
-          echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> api/.env
-          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> api/.env
-          echo "Generated .env file:"
-          cat api/.env  # Print for debugging
+      # - name: Create .env File for Docker
+      #   run: |
+      #     echo "Creating .env file inside api/ directory..."
+      #     mkdir -p api  # Ensure the api directory exists
+      #     echo "PORT=${{ secrets.PORT }}" >> api/.env
+      #     echo "CLOUDFRONT_URL=${{ secrets.CLOUDFRONT_URL }}" >> api/.env
+      #     echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> api/.env
+      #     echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> api/.env
+      #     echo "Generated .env file:"
+      #     cat api/.env  # Print for debugging
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -99,5 +99,5 @@ jobs:
             # docker-compose down || true
             # docker-compose up -d --force-recreate
 
-            docker run -d -p --name pdf-client-container 3000:8080 myapp-frontend
-            docker run -d -p --name pdf-backend-container 4000:5000  myapp-backend
+            docker run -d --name pdf-client-container -p 3000:8080 myapp-frontend
+            docker run -d --name pdf-backend-container -p 4000:5000  myapp-backend

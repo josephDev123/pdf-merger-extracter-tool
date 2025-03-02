@@ -85,19 +85,16 @@ jobs:
             sudo docker load -i myapp-frontend.tar || echo "Failed to load frontend image"
             sudo docker load -i myapp-backend.tar || echo "Failed to load backend image"
 
-            # Ensure the .env file exists on EC2
-            # sudo touch /var/www/myApps/api/.env
-            # sudo chown -R $USER:$USER /var/www/myApps/api
-            # sudo chmod -R 644 /var/www/myApps/api/.env
+            # Stop and remove existing containers if they exist
+            sudo docker stop pdf-client-container || true
+            sudo docker rm pdf-client-container || true
+            sudo docker stop pdf-backend-container || true
+            sudo docker rm pdf-backend-container || true
 
-            # echo "PORT=${{ secrets.PORT }}" >> /var/www/myApps/api/.env
-            # echo "CLOUDFRONT_URL=${{ secrets.CLOUDFRONT_URL }}" >> /var/www/myApps/api/.env
-            # echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> /var/www/myApps/api/.env
-            # echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> /var/www/myApps/api/.env
+            # Run new containers
+            docker run -d -e VITE_BASE_API_URL=http://16.16.215.2:4000/api/ --name pdf-client-container -p 3000:8080 myapp-frontend
+            docker run -d --name pdf-backend-container -p 4000:5000 myapp-backend
 
 
-            # docker-compose down || true
-            # docker-compose up -d --force-recreate
-
-            docker run -d -e VITE_BASE_API_URL=http://localhost:4000/api --name pdf-client-container -p 3000:8080 myapp-frontend
-            docker run -d --name pdf-backend-container -p 4000:5000  myapp-backend
+            # docker run -d -e VITE_BASE_API_URL=http://16.16.215.2:4000/api/ --name pdf-client-container -p 3000:8080 myapp-frontend
+            # docker run -d --name pdf-backend-container -p 4000:5000  myapp-backend

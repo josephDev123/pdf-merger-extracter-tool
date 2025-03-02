@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Create .env File for Docker
+      - name: Create .env File for backend Docker
         run: |
           echo "Creating .env file inside api/ directory..."
           mkdir -p api  # Ensure the api directory exists
@@ -99,5 +99,5 @@ jobs:
             # docker-compose down || true
             # docker-compose up -d --force-recreate
 
-            docker run -d --name pdf-client-container -p 3000:8080 myapp-frontend
+            docker run -d -e VITE_BASE_API_URL=http://localhost:4000/api --name pdf-client-container -p 3000:8080 myapp-frontend
             docker run -d --name pdf-backend-container -p 4000:5000  myapp-backend

@@ -25,11 +25,7 @@ app.use(
 
 app.use("/api/", MergeRouterPDF);
 app.use("/api/", SplitRouterPDF);
-app.use(
-  (err: Error, req: Request, res: Response, next: express.NextFunction) => {
-    GlobalErrorMiddleware(err, req, res, next);
-  }
-);
+app.use(GlobalErrorMiddleware);
 
 app.listen(port, () => {
   console.log("Server is running on http://localhost:" + port);

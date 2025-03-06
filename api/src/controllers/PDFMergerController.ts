@@ -12,12 +12,16 @@ export class PDFMergerController {
     try {
       const files = req.files as Express.Multer.File[];
 
-      if (!files || files.length < 2) {
-        throw new GlobalError(
-          "Please upload at least two PDF files.",
-          400,
-          true
+      if (!files || files.length <= 1) {
+        next(
+          new GlobalError(
+            "EmptyOrlimitedFileUpload",
+            "Please upload at least two PDF files.",
+            400,
+            true
+          )
         );
+        return;
       }
 
       const mergedPdfBytes = await PdfMerger(files);
@@ -33,8 +37,27 @@ export class PDFMergerController {
 
       res.send(Buffer.from(mergedPdfBytes));
       // throw Error("Error merging PDFs");
-    } catch (error) {
-      return next(error);
+    } catch (error: unknown) {
+      if (error instanceof GlobalError) {
+        next(
+          new GlobalError(
+            error.name,
+            error.message,
+            error.statusCode,
+            error.operational
+          )
+        );
+        return;
+      }
+
+      if (error instanceof Error) {
+        next(new GlobalError(error.name, error.message, 500, false));
+        return;
+      }
+
+      return next(
+        new GlobalError("Unknown", "internal server error", 500, false)
+      );
     }
   }
 }

@@ -2,6 +2,7 @@ import { PDFDocument } from "pdf-lib";
 import fs from "fs-extra";
 import { s3Client } from "./S3Client";
 import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
+import { GlobalError } from "./GlobalErrorHandler";
 
 const bucketName = "pdf-splitter-merge-bucket";
 
@@ -94,8 +95,14 @@ export const splitPDF = async (
       if (page >= 1 && page <= totalPages) {
         pageIndices = [page - 1]; // Convert to zero-based index
       } else {
-        throw new Error(
-          `Invalid page number: ${page}. Total pages: ${totalPages}`
+        // throw new Error(
+        //   `Invalid page number: ${page}. Total pages: ${totalPages}`
+        // );
+        throw new GlobalError(
+          "ExceedLimit",
+          `Invalid page number: ${page}. Total pages: ${totalPages}`,
+          400,
+          true
         );
       }
     }
@@ -127,6 +134,19 @@ export const splitPDF = async (
     return splitFiles;
   } catch (error) {
     console.error("Error splitting PDF:", error);
-    throw error;
+    if (error instanceof GlobalError) {
+      throw new GlobalError(
+        error.name,
+        error.message,
+        error.statusCode,
+        error.operational
+      );
+    }
+
+    if (error instanceof Error) {
+      throw new GlobalError(error.name, error.message, 500, false);
+    }
+
+    throw new GlobalError("Unknown", "internal server error", 500, false);
   }
 };

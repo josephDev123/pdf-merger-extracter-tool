@@ -112,8 +112,8 @@ export const PDFExtracter = () => {
     extractFormData.append("pagesRange", pageRange);
 
     mutateAsync(extractFormData, {
-      onError: () => {
-        reactToast.error("Something went wrong");
+      onError: (error) => {
+        reactToast.error(error.message);
       },
 
       onSuccess: (data: Record<string, string>) => {

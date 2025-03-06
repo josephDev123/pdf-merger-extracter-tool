@@ -1,6 +1,8 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { axiosInstance } from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
+import axios, { AxiosError } from "axios";
+import { AxiosErrorHandler } from "./axiosErrorHandler";
 
 export const useMutationAction = <TData, TVariables>(
   method: "post" | "put",
@@ -16,7 +18,15 @@ export const useMutationAction = <TData, TVariables>(
         });
         return response.data;
       } catch (error) {
-        throw new Error(error);
+        console.log(error);
+        // AxiosErrorHandler(error);
+
+        if (error instanceof AxiosError) {
+          // Extract relevant error message from Axios response
+          throw new Error(error.response?.data?.message || "An error occurred");
+        }
+
+        throw new Error("Something went wrong");
       }
     },
     onSuccess: (data) => {

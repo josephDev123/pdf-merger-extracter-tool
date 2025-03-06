@@ -17,6 +17,7 @@ const pdf_lib_1 = require("pdf-lib");
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const S3Client_1 = require("./S3Client");
 const client_s3_1 = require("@aws-sdk/client-s3");
+const GlobalErrorHandler_1 = require("./GlobalErrorHandler");
 const bucketName = "pdf-splitter-merge-bucket";
 // export const splitPDF = async (
 //   inputPath: string,
@@ -89,7 +90,10 @@ const splitPDF = (inputPath, pagesRange // Accepts "start-end" or "singlePage"
                 pageIndices = [page - 1]; // Convert to zero-based index
             }
             else {
-                throw new Error(`Invalid page number: ${page}. Total pages: ${totalPages}`);
+                // throw new Error(
+                //   `Invalid page number: ${page}. Total pages: ${totalPages}`
+                // );
+                throw new GlobalErrorHandler_1.GlobalError("ExceedLimit", `Invalid page number: ${page}. Total pages: ${totalPages}`, 400, true);
             }
         }
         // Create a new PDF document for the split
@@ -114,7 +118,13 @@ const splitPDF = (inputPath, pagesRange // Accepts "start-end" or "singlePage"
     }
     catch (error) {
         console.error("Error splitting PDF:", error);
-        throw error;
+        if (error instanceof GlobalErrorHandler_1.GlobalError) {
+            throw new GlobalErrorHandler_1.GlobalError(error.name, error.message, error.statusCode, error.operational);
+        }
+        if (error instanceof Error) {
+            throw new GlobalErrorHandler_1.GlobalError(error.name, error.message, 500, false);
+        }
+        throw new GlobalErrorHandler_1.GlobalError("Unknown", "internal server error", 500, false);
     }
 });
 exports.splitPDF = splitPDF;

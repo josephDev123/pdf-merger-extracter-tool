@@ -8,11 +8,13 @@ export function AxiosErrorHandler(error: AxiosError) {
     console.log(error.response.data);
     toast.error(error.response.status);
     console.log(error.response.headers);
+    new Error((error.response.data as { message: string }).message);
   } else if (error.request) {
     // The request was made but no response was received
     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
     // http.ClientRequest in node.js
     toast.error(error.request.data.message);
+    new Error(error.request.data.message);
   } else {
     // Something happened in setting up the request that triggered an Error
     toast.error(error.message);

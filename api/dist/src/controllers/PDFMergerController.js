@@ -21,8 +21,9 @@ class PDFMergerController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const files = req.files;
-                if (!files || files.length < 2) {
-                    throw new GlobalErrorHandler_1.GlobalError("Please upload at least two PDF files.", 400, true);
+                if (!files || files.length <= 1) {
+                    next(new GlobalErrorHandler_1.GlobalError("EmptyOrlimitedFileUpload", "Please upload at least two PDF files.", 400, true));
+                    return;
                 }
                 const mergedPdfBytes = yield (0, merger_1.PdfMerger)(files);
                 // Clean up uploaded files
@@ -36,7 +37,15 @@ class PDFMergerController {
                 // throw Error("Error merging PDFs");
             }
             catch (error) {
-                return next(error);
+                if (error instanceof GlobalErrorHandler_1.GlobalError) {
+                    next(new GlobalErrorHandler_1.GlobalError(error.name, error.message, error.statusCode, error.operational));
+                    return;
+                }
+                if (error instanceof Error) {
+                    next(new GlobalErrorHandler_1.GlobalError(error.name, error.message, 500, false));
+                    return;
+                }
+                return next(new GlobalErrorHandler_1.GlobalError("Unknown", "internal server error", 500, false));
             }
         });
     }

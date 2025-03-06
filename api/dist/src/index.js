@@ -25,9 +25,7 @@ app.use((0, cors_1.default)({
 }));
 app.use("/api/", mergeRoutes_1.MergeRouterPDF);
 app.use("/api/", splitRouter_1.SplitRouterPDF);
-app.use((err, req, res, next) => {
-    (0, GlobalError_1.GlobalErrorMiddleware)(err, req, res, next);
-});
+app.use(GlobalError_1.GlobalErrorMiddleware);
 app.listen(port, () => {
     console.log("Server is running on http://localhost:" + port);
     // console.log(

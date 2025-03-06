@@ -15,28 +15,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PDFsplitController = void 0;
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const spliter_1 = require("../utils/spliter");
+const GlobalErrorHandler_1 = require("../utils/GlobalErrorHandler");
 class PDFsplitController {
-    split(req, res) {
+    split(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             // PDF splitting route
             const { file } = req;
             const { pagesRange } = req.body;
             if (!file) {
-                return res.status(400).json({ error: "No file uploaded" });
+                next(new GlobalErrorHandler_1.GlobalError("EmptyFileUpload", "No file uploaded", 400, true));
+                return;
             }
             if (!pagesRange) {
-                return res.status(400).json({ error: "pagesRange value is required" });
+                next(new GlobalErrorHandler_1.GlobalError("EmptyPagesRange", "pagesRange value is required", 400, true));
+                return;
             }
             if (pagesRange.split("-").length < 1 ||
                 typeof Number(pagesRange.split("-")[0]) != "number" ||
                 typeof Number(pagesRange.split("-")[1]) != "number") {
-                return res.status(400).json({ error: "Invalid pagesRange value" });
+                next(new GlobalErrorHandler_1.GlobalError("InvalidPagesRange", "Invalid pagesRange value", 400, true));
+                return;
             }
             const inputPath = file.path;
-            // const pageRangeFormat = {
-            //   start: Number(pagesRange.split("-")[0]),
-            //   end: Number(pagesRange.split("-")[1]),
-            // };
             try {
                 // Splitted the PDF
                 const splitedFile = yield (0, spliter_1.splitPDF)(inputPath, pagesRange);
@@ -47,7 +47,16 @@ class PDFsplitController {
                 yield fs_extra_1.default.remove(inputPath);
             }
             catch (error) {
-                res.status(500).json({ error: "Failed to split PDF" });
+                if (error instanceof GlobalErrorHandler_1.GlobalError) {
+                    next(new GlobalErrorHandler_1.GlobalError(error.name, error.message, error.statusCode, error.operational));
+                    return;
+                }
+                if (error instanceof Error) {
+                    next(new GlobalErrorHandler_1.GlobalError(error.name, error.message, 500, false));
+                    return;
+                }
+                return next(new GlobalErrorHandler_1.GlobalError("Unknown", "internal server error", 500, false));
+                // res.status(500).json({ error: "Failed to split PDF" });
             }
         });
     }

@@ -27,7 +27,7 @@ app.use(
   })
 );
 
-// console.log(process.env.ALLOW_ACCESS_ORIGIN_LOCAL);
+// console.log(process.env.ALLOW_ACCESS_ORIGIN_LOCAL)
 app.use("/api/", MergeRouterPDF);
 app.use("/api/", SplitRouterPDF);
 app.use(GlobalErrorMiddleware);

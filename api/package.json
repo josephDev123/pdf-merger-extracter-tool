@@ -7,7 +7,7 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "vercel-build": "hello world"
+    "vercel-build": "echo world"
   },
   "keywords": [],
   "author": "",

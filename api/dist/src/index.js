@@ -12,7 +12,11 @@ const GlobalError_1 = require("./middleware/GlobalError");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 5000;
-const allowedOrigins = ["http://localhost:3000", "http://16.16.215.2:3000"];
+const allowedOrigins = [
+    process.env.ALLOW_ACCESS_ORIGIN_LOCAL,
+    process.env.ALLOW_ACCESS_ORIGIN_REMOTE,
+    process.env.ALLOW_ACCESS_ORIGIN_NGINX_PORT,
+];
 app.use((0, cors_1.default)({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
@@ -23,15 +27,10 @@ app.use((0, cors_1.default)({
         }
     },
 }));
+// console.log(process.env.ALLOW_ACCESS_ORIGIN_LOCAL);
 app.use("/api/", mergeRoutes_1.MergeRouterPDF);
 app.use("/api/", splitRouter_1.SplitRouterPDF);
 app.use(GlobalError_1.GlobalErrorMiddleware);
 app.listen(port, () => {
     console.log("Server is running on http://localhost:" + port);
-    // console.log(
-    //   process.env.PORT,
-    //   process.env.AWS_ACCESS_KEY,
-    //   process.env.AWS_SECRET_ACCESS_KEY,
-    //   process.env.CLOUDFRONT_URL
-    // );
 });

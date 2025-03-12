@@ -9,7 +9,11 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
-const allowedOrigins = ["http://localhost:3000", "http://16.16.215.2:3000"];
+const allowedOrigins = [
+  process.env.ALLOW_ACCESS_ORIGIN_LOCAL,
+  process.env.ALLOW_ACCESS_ORIGIN_REMOTE,
+  process.env.ALLOW_ACCESS_ORIGIN_NGINX_PORT,
+];
 
 app.use(
   cors({
@@ -23,16 +27,11 @@ app.use(
   })
 );
 
+// console.log(process.env.ALLOW_ACCESS_ORIGIN_LOCAL);
 app.use("/api/", MergeRouterPDF);
 app.use("/api/", SplitRouterPDF);
 app.use(GlobalErrorMiddleware);
 
 app.listen(port, () => {
   console.log("Server is running on http://localhost:" + port);
-  // console.log(
-  //   process.env.PORT,
-  //   process.env.AWS_ACCESS_KEY,
-  //   process.env.AWS_SECRET_ACCESS_KEY,
-  //   process.env.CLOUDFRONT_URL
-  // );
 });

@@ -8,6 +8,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useMutationAction } from "@/utils/useMutationAction";
 import { toast as reactToast } from "react-toastify";
 import { TbLoader } from "react-icons/tb";
+import { base64ToBlob } from "@/utils/base64ToBlob";
 
 interface PDFFile {
   name: string;
@@ -19,11 +20,7 @@ export const PDFExtracter = () => {
   const [pdf, setPdf] = useState<PDFFile | null>(null);
   const [pageRange, setPageRange] = useState("");
   const extractFile = useRef<null | string>(null);
-  console.log(extractFile);
-  const { isPending, mutateAsync, isError } = useMutationAction(
-    "post",
-    "split"
-  );
+  const { isPending, mutate, isError } = useMutationAction("post", "split");
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -111,14 +108,15 @@ export const PDFExtracter = () => {
     extractFormData.append("file", pdf.file);
     extractFormData.append("pagesRange", pageRange);
 
-    mutateAsync(extractFormData, {
+    mutate(extractFormData, {
       onError: (error) => {
         reactToast.error(error.message);
       },
 
       onSuccess: (data: Record<string, string>) => {
-        console.log(data);
-        extractFile.current = data.file;
+        const blob = base64ToBlob(data.file);
+        const pdfUrl = URL.createObjectURL(blob);
+        extractFile.current = pdfUrl;
         toast({
           title: "EXtracted Page or range",
           description: "PDF Extracted successfully",

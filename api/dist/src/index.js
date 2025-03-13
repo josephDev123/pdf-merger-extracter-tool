@@ -30,7 +30,7 @@ app.use((0, cors_1.default)({
 // console.log(process.env.ALLOW_ACCESS_ORIGIN_LOCAL)
 app.use("/api/", mergeRoutes_1.MergeRouterPDF);
 app.use("/api/", splitRouter_1.SplitRouterPDF);
-app.use("/", (req, res) => {
+app.use("/api/testing", (req, res) => {
     res.send("hello world");
     return;
 });

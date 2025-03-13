@@ -15,10 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.splitPDF = void 0;
 const pdf_lib_1 = require("pdf-lib");
 const fs_extra_1 = __importDefault(require("fs-extra"));
-const S3Client_1 = require("./S3Client");
-const client_s3_1 = require("@aws-sdk/client-s3");
+// import { s3Client } from "./S3Client";
+// import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 const GlobalErrorHandler_1 = require("./GlobalErrorHandler");
-const bucketName = "pdf-splitter-merge-bucket";
+// const bucketName = "pdf-splitter-merge-bucket";
 // export const splitPDF = async (
 //   inputPath: string,
 //   pagesRange: Record<string, number>
@@ -73,6 +73,7 @@ const splitPDF = (inputPath, pagesRange // Accepts "start-end" or "singlePage"
         const originalPdf = yield pdf_lib_1.PDFDocument.load(pdfBytes);
         const totalPages = originalPdf.getPageCount();
         let splitFiles;
+        let extractedBufferResult;
         const cloudfrontURL = process.env.CLOUDFRONT_URL || "https://your-default-url.com";
         let pageIndices = [];
         if (pagesRange.includes("-")) {
@@ -103,18 +104,23 @@ const splitPDF = (inputPath, pagesRange // Accepts "start-end" or "singlePage"
         copiedPages.forEach((page) => splitPdf.addPage(page));
         // Save the split PDF as a buffer
         const splitBuffer = yield splitPdf.save();
+        // console.log(splitBuffer);
         // Upload the split PDF to S3
-        const fileName = `split_${Date.now()}-${pagesRange}.pdf`;
-        const uploadParams = {
-            Bucket: bucketName,
-            Key: fileName,
-            Body: splitBuffer,
-            ContentType: "application/pdf",
-        };
-        yield S3Client_1.s3Client.send(new client_s3_1.PutObjectCommand(uploadParams));
+        // const fileName = `split_${Date.now()}-${pagesRange}.pdf`;
+        // const uploadParams: PutObjectCommandInput = {
+        //   Bucket: bucketName,
+        //   Key: fileName,
+        //   Body: splitBuffer,
+        //   ContentType: "application/pdf",
+        // };
+        // await s3Client.send(new PutObjectCommand(uploadParams));
         // Add the S3 URL to the response
-        splitFiles = `${cloudfrontURL}/${fileName}`;
-        return splitFiles;
+        // splitFiles = `${cloudfrontURL}/${fileName}`;
+        // splitBufferResult = splitBuffer.;
+        // splitFiles
+        const base64PDF = Buffer.from(splitBuffer).toString("base64");
+        extractedBufferResult = base64PDF;
+        return extractedBufferResult;
     }
     catch (error) {
         console.error("Error splitting PDF:", error);

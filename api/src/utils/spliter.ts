@@ -1,10 +1,10 @@
 import { PDFDocument } from "pdf-lib";
 import fs from "fs-extra";
-import { s3Client } from "./S3Client";
-import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
+// import { s3Client } from "./S3Client";
+// import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import { GlobalError } from "./GlobalErrorHandler";
 
-const bucketName = "pdf-splitter-merge-bucket";
+// const bucketName = "pdf-splitter-merge-bucket";
 
 // export const splitPDF = async (
 //   inputPath: string,
@@ -73,6 +73,7 @@ export const splitPDF = async (
     const originalPdf = await PDFDocument.load(pdfBytes);
     const totalPages = originalPdf.getPageCount();
     let splitFiles: string;
+    let extractedBufferResult: string;
     const cloudfrontURL =
       process.env.CLOUDFRONT_URL || "https://your-default-url.com";
 
@@ -116,22 +117,27 @@ export const splitPDF = async (
 
     // Save the split PDF as a buffer
     const splitBuffer = await splitPdf.save();
+    // console.log(splitBuffer);
 
     // Upload the split PDF to S3
-    const fileName = `split_${Date.now()}-${pagesRange}.pdf`;
-    const uploadParams: PutObjectCommandInput = {
-      Bucket: bucketName,
-      Key: fileName,
-      Body: splitBuffer,
-      ContentType: "application/pdf",
-    };
+    // const fileName = `split_${Date.now()}-${pagesRange}.pdf`;
+    // const uploadParams: PutObjectCommandInput = {
+    //   Bucket: bucketName,
+    //   Key: fileName,
+    //   Body: splitBuffer,
+    //   ContentType: "application/pdf",
+    // };
 
-    await s3Client.send(new PutObjectCommand(uploadParams));
+    // await s3Client.send(new PutObjectCommand(uploadParams));
 
     // Add the S3 URL to the response
-    splitFiles = `${cloudfrontURL}/${fileName}`;
+    // splitFiles = `${cloudfrontURL}/${fileName}`;
+    // splitBufferResult = splitBuffer.;
+    // splitFiles
+    const base64PDF = Buffer.from(splitBuffer).toString("base64");
+    extractedBufferResult = base64PDF;
 
-    return splitFiles;
+    return extractedBufferResult;
   } catch (error) {
     console.error("Error splitting PDF:", error);
     if (error instanceof GlobalError) {

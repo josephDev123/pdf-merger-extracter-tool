@@ -30,7 +30,7 @@ app.use(
 // console.log(process.env.ALLOW_ACCESS_ORIGIN_LOCAL)
 app.use("/api/", MergeRouterPDF);
 app.use("/api/", SplitRouterPDF);
-app.get("/", (req: Request, res: Response) => {
+app.use("/api/testing", (req: Request, res: Response) => {
   res.send("hello world");
   return;
 });

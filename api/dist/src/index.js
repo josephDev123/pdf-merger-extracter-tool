@@ -38,3 +38,4 @@ app.use(GlobalError_1.GlobalErrorMiddleware);
 app.listen(port, () => {
     console.log("Server is running on http://localhost:" + port);
 });
+// "vercel-build": "echo world"

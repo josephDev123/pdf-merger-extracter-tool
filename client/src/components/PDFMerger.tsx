@@ -10,6 +10,7 @@ import { TbLoader } from "react-icons/tb";
 import { error } from "console";
 import { AxiosError } from "axios";
 import { AxiosErrorHandler } from "@/utils/axiosErrorHandler";
+import { PdfModaLayout } from "./PdfModaLayout";
 
 interface PDFFile {
   name: string;
@@ -262,32 +263,25 @@ export const PDFMerger = () => {
         </Button>
       </div>
 
-      {togglePreview && previewUrl && (
-        <div className="w-full max-w-3xl mt-3">
-          {/* Display PDF */}
-          <iframe
-            src={previewUrl}
-            className="w-full h-[500px] border"
-            title="PDF Preview"
-          ></iframe>
+      <PdfModaLayout
+        open={togglePreview}
+        onClose={() => setTogglePreview(false)}
+      >
+        {/* Display PDF */}
+        <iframe
+          src={previewUrl}
+          className="w-full h-[500px] border m-4"
+          title="PDF Preview"
+        ></iframe>
 
-          {/* Download Button */}
-          <a
+        {/* <a
             href={previewUrl}
             download="preview.pdf"
             className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md inline-block"
           >
             Download PDF
-          </a>
-
-          <Button
-            onClick={() => setTogglePreview(false)}
-            className="mt-4 px-4 py-2 ml-3 text-white rounded-md inline-block"
-          >
-            hide
-          </Button>
-        </div>
-      )}
+          </a> */}
+      </PdfModaLayout>
     </DndProvider>
   );
 };

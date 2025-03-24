@@ -9,6 +9,7 @@ import { useMutationAction } from "@/utils/useMutationAction";
 import { toast as reactToast } from "react-toastify";
 import { TbLoader } from "react-icons/tb";
 import { base64ToBlob } from "@/utils/base64ToBlob";
+import { PdfModaLayout } from "./PdfModaLayout";
 
 interface PDFFile {
   name: string;
@@ -19,8 +20,11 @@ interface PDFFile {
 export const PDFExtracter = () => {
   const [pdf, setPdf] = useState<PDFFile | null>(null);
   const [pageRange, setPageRange] = useState("");
-  const extractFile = useRef<null | string>(null);
-  const { isPending, mutate, isError } = useMutationAction("post", "split");
+  // const [extractFile, setExtractFile] = useState<string | null>(null);
+  const extractFile = useRef<string | null>(null);
+  const [togglePreview, setTogglePreview] = useState(false);
+
+  const { isPending, mutate } = useMutationAction("post", "split");
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -117,6 +121,8 @@ export const PDFExtracter = () => {
         const blob = base64ToBlob(data.file);
         const pdfUrl = URL.createObjectURL(blob);
         extractFile.current = pdfUrl;
+        // setExtractFile(pdfUrl);
+        setTogglePreview(true);
         toast({
           title: "EXtracted Page or range",
           description: "PDF Extracted successfully",
@@ -197,16 +203,26 @@ export const PDFExtracter = () => {
           </div>
         )}
       </Card>
+      <div className="flex items-center justify-between mt-4">
+        <Button
+          disabled={extractFile.current === null}
+          onClick={() => setTogglePreview(true)}
+          className={` px-4 py-2 bg-green-500 text-white rounded-md inline-block sm:text-base text-sm`}
+        >
+          Toggle extract
+        </Button>
+      </div>
 
-      {extractFile.current && (
-        <div className="w-full max-w-3xl mt-3">
-          <iframe
-            src={extractFile.current}
-            className="w-full h-[500px] border"
-            title="PDF Preview"
-          ></iframe>
-        </div>
-      )}
+      <PdfModaLayout
+        open={!!togglePreview}
+        onClose={() => setTogglePreview(false)}
+      >
+        <iframe
+          src={extractFile.current}
+          className="w-full h-[500px] border m-4"
+          title="PDF Preview"
+        ></iframe>
+      </PdfModaLayout>
     </>
   );
 };

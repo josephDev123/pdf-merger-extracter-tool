@@ -11,6 +11,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 const allowedOrigins = [
   process.env.ALLOW_ACCESS_ORIGIN_LOCAL,
+  process.env.ALLOW_ACCESS_ORIGIN_LOCAL2,
   process.env.ALLOW_ACCESS_ORIGIN_REMOTE,
   process.env.ALLOW_ACCESS_ORIGIN_NGINX_PORT,
 ];

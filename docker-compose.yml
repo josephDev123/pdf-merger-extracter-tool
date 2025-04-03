@@ -16,6 +16,7 @@ services:
       - Nginx
 
   Nginx:
+    # build: ./nginx
     image: nginx:stable
     container_name: nginx-container
     ports:
@@ -37,7 +38,7 @@ services:
     env_file:
       - ./api/.env
     ports:
-      - "4000:5000"
+      - "5000:5000"
     restart: always
     networks:
       - nginx_networks

@@ -7,9 +7,6 @@ import { Card } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { useMutationAction } from "@/utils/useMutationAction";
 import { TbLoader } from "react-icons/tb";
-import { error } from "console";
-import { AxiosError } from "axios";
-import { AxiosErrorHandler } from "@/utils/axiosErrorHandler";
 import { PdfModaLayout } from "./PdfModaLayout";
 
 interface PDFFile {
@@ -29,7 +26,7 @@ export const PDFMerger = () => {
   const [togglePreview, setTogglePreview] = useState(false);
   // console.log(pdfs);
 
-  const { mutateAsync, isPending } = useMutationAction(
+  const { mutate, isPending } = useMutationAction(
     "post",
     "merge",
     "arraybuffer"
@@ -121,7 +118,7 @@ export const PDFMerger = () => {
       formDataPayload.append("file", item.file);
     });
 
-    mutateAsync(formDataPayload, {
+    mutate(formDataPayload, {
       onSuccess: (data: any) => {
         try {
           const pdfData = new Blob([data], { type: "application/pdf" });
@@ -273,14 +270,6 @@ export const PDFMerger = () => {
           className="w-full h-[500px] border m-4"
           title="PDF Preview"
         ></iframe>
-
-        {/* <a
-            href={previewUrl}
-            download="preview.pdf"
-            className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md inline-block"
-          >
-            Download PDF
-          </a> */}
       </PdfModaLayout>
     </DndProvider>
   );

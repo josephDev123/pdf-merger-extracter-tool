@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -46,4 +46,19 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+}
+
+/* buy me a coffee */
+/* Style the BuyMeACoffee button */
+.bmc-button {
+  /* Resize the button */
+  transform: scale(0.8); /* Reduce size to 80% of its original size */
+}
+
+/* Position the button at the bottom right */
+.bmc-button-container {
+  position: fixed;
+  bottom: 20px; /* 20px from the bottom of the screen */
+  right: 20px; /* 20px from the right edge of the screen */
+  z-index: 1000; /* Make sure it's above other elements */
 }

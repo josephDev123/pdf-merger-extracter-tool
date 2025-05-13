@@ -7,30 +7,21 @@ const Index = () => {
   const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-background p-6 md:p-12 ">
-      <Link
-        to={"https://buymeacoffee.com/josephdev"}
-        // onClick={() => navigate("https://buymeacoffee.com/josephdev")}
-        type="button"
-        className="size-28 fixed right-2 "
-      >
-        <img src={"/buymeCoffee.png"} alt="" className="" />
-      </Link>
-
       <a
         href="https://buymeacoffee.com/josephdev"
         target="_blank"
         rel="noopener noreferrer"
-        className="size-28  fixed right-2 "
+        className="w-28  absolute md:right-2 md:top-2 bottom-2"
       >
         <img src={"/buymeCoffee.png"} alt="" className="" />
       </a>
 
-      <div className="max-w-3xl mx-auto space-y-8">
+      <div className="max-w-3xl mx-auto space-y-8 ">
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold tracking-tight">
+          <h1 className="sm:text-4xl text-2xl font-bold tracking-tight">
             Merge & Extract PDF Tools.
           </h1>
-          <p className="text-lg text-muted-foreground">
+          <p className="sm:text-lg  text-muted-foreground">
             Merge multiple PDFs into one or extract specific page(s) from PDF.
           </p>
         </div>

@@ -133,7 +133,7 @@ export const PDFExtracter = () => {
 
   return (
     <>
-      <Card className="p-6 animate-fade-up">
+      <Card className="p-6 animate-fade-up dark:bg-black dark:text-white text-black">
         <div
           onDragOver={handleDragOver}
           onDrop={handleDrop}
@@ -144,7 +144,10 @@ export const PDFExtracter = () => {
             Drag and drop a PDF file here
           </p>
           <p className="text-sm text-muted-foreground mb-4">or</p>
-          <Button variant="outline" className="relative">
+          <Button
+            variant="outline"
+            className="relative dark:bg-black dark:text-white text-black"
+          >
             Choose file
             <input
               type="file"
@@ -156,8 +159,8 @@ export const PDFExtracter = () => {
         </div>
 
         {pdf && (
-          <div className="space-y-4 animate-fade-in">
-            <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+          <div className="space-y-4 animate-fade-in ">
+            <div className="flex items-center justify-between p-3 bg-muted rounded-lg dark:bg-black dark:text-white text-black dark:border">
               <div className="flex items-center gap-3">
                 <File size={20} className="text-muted-foreground" />
                 <div>
@@ -183,6 +186,7 @@ export const PDFExtracter = () => {
                 id="pageRange"
                 placeholder="e.g., 1-3, 5"
                 value={pageRange}
+                className="dark:bg-black dark:text-white text-black"
                 onChange={(e) => setPageRange(e.target.value)}
               />
               <p className="text-sm text-muted-foreground">

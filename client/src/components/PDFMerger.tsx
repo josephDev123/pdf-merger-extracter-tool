@@ -172,13 +172,13 @@ export const PDFMerger = () => {
     return (
       <div
         ref={(node) => drag(drop(node))}
-        className="flex items-center justify-between p-3 bg-muted rounded-lg"
+        className="flex items-center justify-between p-3 bg-muted rounded-lg dark:bg-black dark:text-white text-black dark:border"
       >
         <div className="flex items-center gap-3">
           <Move size={20} className="text-muted-foreground cursor-move" />
           <FilePlus size={20} className="text-muted-foreground" />
           <div>
-            <p className="font-medium">{pdf.name}</p>
+            <p className="font-medium sm:text-base text-xs ">{pdf.name}</p>
             <p className="text-sm text-muted-foreground">
               {(pdf.size / 1024 / 1024).toFixed(2)} MB
             </p>
@@ -198,7 +198,7 @@ export const PDFMerger = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Card className="p-6 animate-fade-up">
+      <Card className="p-6 animate-fade-up dark:bg-black dark:text-white text-black">
         <div
           onDragOver={handleDragOver}
           onDrop={handleDrop}
@@ -209,7 +209,10 @@ export const PDFMerger = () => {
             Drag and drop PDF files here
           </p>
           <p className="text-sm text-muted-foreground mb-4">or</p>
-          <Button variant="outline" className="relative">
+          <Button
+            variant="outline"
+            className="relative dark:bg-black dark:text-white text-black"
+          >
             Choose files
             <input
               type="file"
